@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auto Coupon Redeem</title>
+</head>
+<body>
+    <h3>Redeem Coupons</h3>
+
+    <input
+        type="text"
+        id="pid"
+        placeholder="Enter UUID"
+        style="width: 300px;"
+    >
+    <br><br>
+
+    <button id="redeemBtn">Redeem All Coupons</button>
+
+    <p id="status"></p>
+
+    <script>
+        // 🔧 ใส่ coupon code ที่ต้องการตรงนี้
+        const couponList = [
+            "COUPON001",
+            "COUPON002",
+            "COUPON003"
+        ];
+
+        const pidInput = document.getElementById('pid');
+        const status = document.getElementById('status');
+        const btn = document.getElementById('redeemBtn');
+
+        btn.addEventListener('click', startRedeem);
+
+        function startRedeem() {
+            const pid = pidInput.value.trim();
+
+            if (!pid) {
+                alert('กรุณากรอก UUID');
+                return;
+            }
+
+            btn.disabled = true;
+            status.innerText = 'กำลังยิง coupon...';
+
+            couponList.forEach((coupon, index) => {
+                const url = `https://coupon.netmarble.com/api/coupon/reward?gameCode=tskgb&couponCode=${encodeURIComponent(coupon)}&langCd=EN_US&pid=${encodeURIComponent(pid)}`;
+
+                setTimeout(() => {
+                    window.open(url, '_blank');
+                }, index * 500);
+            });
+
+            setTimeout(() => {
+                status.innerText = 'ส่งครบทุก coupon แล้ว';
+                btn.disabled = false;
+            }, couponList.length * 500);
+        }
+    </script>
+</body>
+</html>
